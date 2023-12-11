@@ -7,7 +7,7 @@
 static int WIDTH = 800;
 static int HEIGHT = 800;
 
-bool frustrum = false;
+bool frustrum = true;
 
 const int N = 100;
 
@@ -24,7 +24,11 @@ void update_viewport(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
     glLoadIdentity();
 	if(frustrum){
-		glFrustum(-10, 10, 10, -10, 0.1, 10);
+		//glFrustum(-10, 10, 10, -10, 0.1, 10);
+		 if (width <= height)
+        glOrtho(-15.f, 15.f, -15.f / aspect_ratio, 15.f / aspect_ratio, 15.f, -15.f);
+    else
+        glOrtho(-15.f * aspect_ratio, 15.f * aspect_ratio, -15.f, 15.f, 15.f, -15.f);
     }
 	else{
 		if (width <= height)
@@ -36,17 +40,17 @@ void update_viewport(GLFWwindow* window, int width, int height){
     glLoadIdentity();
 }
 
-void startup(){
-		glClearColor(0.2, 0.2, 0.2, 1.0);
-		for (int i = 0; i < N; ++i) {
-				float u = static_cast<float>(i) / (N - 1);
-				for (int j = 0; j < N; ++j) {
-				float v = static_cast<float>(j) / (N - 1);
-				vertices[i][j][0] = 8 * (1 - std::cos(u * M_PI)) * std::cos(2 * M_PI * v);
-				vertices[i][j][1] = 12.8 * (1 - std::cos(u * M_PI)) * std::sin(2 * M_PI * v);
-				vertices[i][j][2] = 1.6 * std::sin(u * 2 * M_PI);
-				}		
-		}	
+void startup() {
+    glClearColor(0.2, 0.2, 0.2, 1.0);
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+        	float u = static_cast<float>(i) / static_cast<float>(N);
+            float v = static_cast<float>(j) / static_cast<float>(N);
+            vertices[i][j][0] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (cos(M_PI * v));
+			vertices[i][j][1] = (160 * pow(u, 4)) - (320 * pow(u, 3)) + (160 * pow(u, 2));
+			vertices[i][j][2] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (sin(M_PI * v));
+        }
+    }
 }
 
 void shutdown(GLFWwindow* window){
@@ -83,7 +87,7 @@ int main(){
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, update_viewport);
     glfwSwapInterval(1);
-
+	update_viewport(window, WIDTH, HEIGHT);
     startup();
     while(!glfwWindowShouldClose(window)){
         render(glfwGetTime());
