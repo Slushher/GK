@@ -13,9 +13,8 @@ float cameraX = 0.0f;
 float cameraY = 0.0f;
 float cameraZ = 15.0f;
 
-
 bool frustrum = true;
-const int N = 50;
+const int N = 200;
 float vertices[N][N][3];
 
 typedef struct
@@ -61,19 +60,18 @@ void update_viewport(GLFWwindow *window, int width, int height)
     glLoadIdentity();
 }
 
-
 void startup()
 {
     glfwWindowHint(GLFW_DEPTH_BITS, 32);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glClearColor(0.2, 0.2, 0.2, 1.0);
-    for (int i = 0; i <= N; ++i)
+    for (int i = 0; i < N; ++i)
     {
-        float u = static_cast<float>(i) * (360.f/N) / static_cast<float>(360.f);
-        for (int j = 0; j <= N; ++j)
+        float u = static_cast<float>(i) / static_cast<float>(N - 1);
+        for (int j = 0; j < N; ++j)
         {
-            float v = static_cast<float>(j) * (360.f/N) / static_cast<float>(360.f);
+            float v = static_cast<float>(j) / static_cast<float>(N - 1);
             vertices[i][j][0] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (cos(2 * M_PI * v));
             vertices[i][j][1] = (160 * pow(u, 4)) - (320 * pow(u, 3)) + (160 * pow(u, 2));
             vertices[i][j][2] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (sin(2 * M_PI * v));
@@ -92,35 +90,35 @@ void render(double time)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     glRotatef(static_cast<float>(time) * 40.f, 1, 1, 1);
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N - 1; ++i)
     {
-        for (int j = 0; j < N; ++j)
+        for (int j = 0; j < N - 1; ++j)
         {
             glBegin(GL_TRIANGLES);
             glColor3f(color_rand[i][j][0].values[0], color_rand[i][j][0].values[1], color_rand[i][j][0].values[2]);
             glVertex3fv(vertices[i][j]);
 
-            //glColor3f(color_rand[i][j][1].values[0], color_rand[i][j][1].values[1], color_rand[i][j][1].values[2]);
+            glColor3f(color_rand[i][j][1].values[0], color_rand[i][j][1].values[1], color_rand[i][j][1].values[2]);
             glVertex3fv(vertices[i][j + 1]);
 
-            //glColor3f(color_rand[i][j][2].values[0], color_rand[i][j][2].values[1], color_rand[i][j][2].values[2]);
+            glColor3f(color_rand[i][j][2].values[0], color_rand[i][j][2].values[1], color_rand[i][j][2].values[2]);
             glVertex3fv(vertices[i + 1][j]);
             glEnd();
             glBegin(GL_TRIANGLES);
-            //glColor3f(color_rand[i][j][3].values[0], color_rand[i][j][3].values[1], color_rand[i][j][3].values[2]);
+            glColor3f(color_rand[i][j][3].values[0], color_rand[i][j][3].values[1], color_rand[i][j][3].values[2]);
             glVertex3fv(vertices[i + 1][j]);
 
-            //glColor3f(color_rand[i][j][4].values[0], color_rand[i][j][4].values[1], color_rand[i][j][4].values[2]);
+            glColor3f(color_rand[i][j][4].values[0], color_rand[i][j][4].values[1], color_rand[i][j][4].values[2]);
             glVertex3fv(vertices[i + 1][j + 1]);
 
-            //glColor3f(color_rand[i][j][5].values[0], color_rand[i][j][5].values[1], color_rand[i][j][5].values[2]);
+            glColor3f(color_rand[i][j][5].values[0], color_rand[i][j][5].values[1], color_rand[i][j][5].values[2]);
             glVertex3fv(vertices[i][j+1]);
             glEnd();
         }
     }
     glEnd();
-    glFlush();
 }
+
 // Zmienna losowa normalizowana
 float random_normalized()
 {

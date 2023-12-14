@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<indexing>
+ <object alt="" name="Image16" object_type="graphic"/>
+ <object alt="" name="Image14" object_type="graphic"/>
+ <object alt="" name="Image13" object_type="graphic"/>
+ <object alt="" name="Image12" object_type="graphic"/>
+ <object alt="" name="Image11" object_type="graphic"/>
+ <object alt="" name="Image10" object_type="graphic"/>
+ <object alt="" name="Image9" object_type="graphic"/>
+ <object alt="" name="Image8" object_type="graphic"/>
+ <object alt="" name="Image7" object_type="graphic"/>
+ <object alt="" name="Image6" object_type="graphic"/>
+ <object alt="" name="Image5" object_type="graphic"/>
+ <object alt="" name="Image4" object_type="graphic"/>
+ <object alt="" name="Image3" object_type="graphic"/>
+ <object alt="" name="Image2" object_type="graphic"/>
+ <object alt="" name="Image1" object_type="graphic"/>
+ <object alt="" name="Obraz 1" object_type="graphic"/>
+ <object alt="" name="Image15" object_type="graphic"/>
+ <object index="60" name="Table1" object_type="table"/>
+ <paragraph index="66" node_type="writer" parent_index="60">Imie, nazwisko oraz numer albumu studenta:</paragraph>
+ <paragraph index="68" node_type="writer" parent_index="60">Hubert Twardowski 264446</paragraph>
+ <paragraph index="72" node_type="writer" parent_index="60">Wydział: Telekomunikacji i informatyki</paragraph>
+ <paragraph index="74" node_type="writer" parent_index="60">Rok:2023</paragraph>
+ <paragraph index="77" node_type="writer" parent_index="60">Rok akadem.: 2022/23</paragraph>
+ <paragraph index="80" node_type="writer" parent_index="60">Grafika komputerowa i komunikacja człowiek-komputer</paragraph>
+ <paragraph index="83" node_type="writer" parent_index="60">Data ćwiczenia:</paragraph>
+ <paragraph index="84" node_type="writer" parent_index="60">29.11.2023</paragraph>
+ <paragraph index="87" node_type="writer" parent_index="60">Temat ćwiczenia laboratoryjnego:</paragraph>
+ <paragraph index="88" node_type="writer" parent_index="60">Laboratorium 3 - Modelowanie obiektów 3D</paragraph>
+ <paragraph index="91" node_type="writer" parent_index="60">Ocena:</paragraph>
+ <paragraph index="96" node_type="writer" parent_index="60">Nr ćwiczenia:</paragraph>
+ <paragraph index="97" node_type="writer" parent_index="60">3</paragraph>
+ <paragraph index="103" node_type="writer" parent_index="60">Podpis prowadzącego:</paragraph>
+ <paragraph index="109" node_type="writer">   </paragraph>
+ <paragraph index="110" node_type="writer">   </paragraph>
+ <paragraph index="111" node_type="writer">   </paragraph>
+ <paragraph index="112" node_type="writer">   </paragraph>
+ <paragraph index="113" node_type="writer">   </paragraph>
+ <paragraph index="114" node_type="writer">   </paragraph>
+ <paragraph index="115" node_type="writer">   </paragraph>
+ <paragraph index="116" node_type="writer">   </paragraph>
+ <paragraph index="117" node_type="writer">   </paragraph>
+ <paragraph index="118" node_type="writer">   </paragraph>
+ <paragraph index="119" node_type="writer">   </paragraph>
+ <paragraph index="125" node_type="writer"> Cele ćwiczeń </paragraph>
+ <paragraph index="126" node_type="writer"> Zrozumienie różnych sposobów definiowania modeli 3D
+ Nabranie wprawy w definiowaniu brył przy pomocy wierzchołków
+ Poznanie zasady działania mechanizmu bufora głębi</paragraph>
+ <paragraph index="128" node_type="writer">Zadanie. 1 </paragraph>
+ <paragraph index="129" node_type="writer">Treść: Zadaniem jest zadeklarowanie tablicy [N]x[N]x[3], wyznaczenie parametrów u i v (w przedziale 0.0 do 1.0, obliczenie dla każdej pary parametrów u i v wartości tablicy x,y,z.</paragraph>
+ <paragraph index="130" node_type="writer">W funkcji render() wyświetlić współrzędne oraz użycie prymitywu GL_POINTS</paragraph>
+ <paragraph index="131" node_type="writer">Wykonanie: Na początku zdefiniowaliśmy zmienną N oraz tablicę w języku C++ w następujący sposób:</paragraph>
+ <paragraph index="135" node_type="writer">Aby wypełnić tablicę stworzyliśmy w pętle for, obliczyliśmy parametry u i v aby zaczynały się na 0.0 i kończyły na 1.0, wewnątrz pętli przypisaliśmy wartości tablicy oraz użyliśmy następujący wzór z wykładów</paragraph>
+ <paragraph index="141" node_type="writer">Następnie aby narysować punkty oraz wypisać współrzędne również stworzyliśmy pętlę, tym razem pojedyńczą wywołującą funkcje glVertex3f(), rysującą każdy element tablicy oraz funkcję printf do wypisywania współrzędnych.</paragraph>
+ <paragraph index="142" node_type="writer">Rezultat:</paragraph>
+ <paragraph index="143" node_type="writer">Jajko narysowane za pomocą punktów w oknie:</paragraph>
+ <paragraph index="153" node_type="writer">Współrzędne wypisane w konsoli z której uruchomiono program</paragraph>
+ <paragraph index="155" node_type="writer"> </paragraph>
+ <paragraph index="178" node_type="writer">Zadanie. 2 </paragraph>
+ <paragraph index="179" node_type="writer">Treść: Zbudowanie modelu jajka przy pomocy linii, połączenie elementów sąsiadujących oraz obracanie jajka.</paragraph>
+ <paragraph index="180" node_type="writer">Wykonanie: </paragraph>
+ <paragraph index="181" node_type="writer">Modyfikujemy poprzedni program, zamiast GL_POINTS wykorzystujemy primityw GL_LINES.</paragraph>
+ <paragraph index="191" node_type="writer">Równierz łączymy sąsiadujące elementy, jest to dosyć proste gdyż postępujemy analogicznie do treści zadania czyli definiujemy wierzchołki w sposób jaki pokazany jest wyżej. W funkcji render() wywołujemy funkcję glRotatef(), przyjmuje ona 4 argumenty: kąt obrotu (w radianach) oraz zmienne x,y,z które definują koordynaty wektora obrotu. Aby funkcja ta zadziałała przy wywołaniu funkcji render() podajemy argument glfwGetTime() który wzraca czas tym samym inkrementując kąt obrotu.</paragraph>
+ <paragraph index="195" node_type="writer">Rezultat: </paragraph>
+ <paragraph index="204" node_type="writer">Zadanie. 3 </paragraph>
+ <paragraph index="205" node_type="writer">Treść: Zbudowanie modelu jajka przy pomocy trójkątów używając prymitywu GL_TRIANGLES,  połączenie elementów (i,j) z dwoma sąsiednimi elementami oraz przypisanie każdemu z wierzchołków losowego koloru.</paragraph>
+ <paragraph index="206" node_type="writer">Wykonanie: </paragraph>
+ <paragraph index="207" node_type="writer">Aby uprościć przechowywanie kolorów tworzymy następujący struct, zawiera on 3 zmienne typu double, a po zdefiniowaniu owego structa tworzymy tablicę dla każdego wierzchołka (w naszym przypadku [N]x[N]x[6] gdyż każdy element jajka ma 6 wierzchołków lub 2 kwadraty.</paragraph>
+ <paragraph index="222" node_type="writer">W funkcji main wypełniamy tablicę losowymi kolorami za pomocą funkcji random_normalized() którą stworzyliśmy na poprzednich labolatoriach. Zwraca ona losowe wartości z zakresu 0.0 do 1.0</paragraph>
+ <paragraph index="228" node_type="writer">Podobnie do poprzedniego zadania rysujemy wierzchołki jednak dla każdego przydzielamy kolor funkcją glColor3f z parametrem z tablicy kolorów zdefiniowanej na początku pliku.</paragraph>
+ <paragraph index="238" node_type="writer">Aby jednak uniknąć migotania wywołujemy 2 (3 opcjonalnie w zależności od systemu operacyjnego):</paragraph>
+ <paragraph index="239" node_type="writer">glfwWindowHint(GLFW_DEPTH_BITS, 32) – Przydzielamy 32 bity dla buforu głębi</paragraph>
+ <paragraph index="240" node_type="writer">glEnable(GL_DEPTH_TEST) – Włączamy depth testing. Wykonuje on test wartości fragmentu z buforem głębi i jeśli jest on poprawny to fragment jest rysowany.</paragraph>
+ <paragraph index="241" node_type="writer">glDisable(GL_CULL_FACE) – Wyłączamy przycinanie elementów które są ‘schowane’ za innymi elementami</paragraph>
+ <paragraph index="246" node_type="writer">Ważne jest też aby kolory które przydzielamy naszemu modelowi były jednolite czyli nie zmieniały się w trakcie działania programu. Jest to też przyczyna migotania.</paragraph>
+ <paragraph index="250" node_type="writer">Rezultat: </paragraph>
+ <paragraph index="254" node_type="writer">Wnioski:</paragraph>
+ <paragraph index="255" node_type="writer"> W drodze aby zaimplementować poprawny model jajka napotkaliśmy wiele problemów. Jednymi z nich były znikające tylne ściany (BACK FACE CULLING) przy braku włączonego DEPTH TESTINGU. Problemem był również tzw Z FIGHTING który można było rozwiązać przydzieleniem większej ilości bitów dla bufora głębi. W drodze aby uzyskać spójny model elipsy musieliśmy pokonać problem z implementacją algorytmu gdyż u i v powinny zaczynać na 0.0 i kończyć na 1.0 bądź w przeciwnym wypadku będą ‘ucięte na pół’, kolejnym problemem były złe indeksy, wystarczył błąd w byle jakiej pętli a na ekranie mogliśmy widzieć wszelakie graficzne błędy. Jednak nauczyliśmy się najprzeróżniejszych prymitywów w OpenGL czy też obsługi bufora głębi który jest ważny przy implementowaniu modelów 3D. Prezentacja dostarczona na laboratorium oraz dokumentacja OpenGL była wystarczającym źródłem wiedzy aby wykonać powieżone nam zadania.</paragraph>
+ <paragraph index="273" node_type="writer"> </paragraph>
+</indexing>

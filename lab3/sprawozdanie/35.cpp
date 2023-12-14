@@ -3,27 +3,17 @@
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <stdlib.h>
-#include <time.h>
 
 static int WIDTH = 800;
 static int HEIGHT = 800;
 
 float cameraX = 0.0f;
 float cameraY = 0.0f;
-float cameraZ = 15.0f;
+float cameraZ = 10.0f;
 
-
-bool frustrum = true;
+bool frustrum = false;
 const int N = 50;
 float vertices[N][N][3];
-
-typedef struct
-{
-    double values[3];
-} Vertex3f;
-
-Vertex3f color_rand[N][N][6];
 
 void update_viewport(GLFWwindow *window, int width, int height)
 {
@@ -40,11 +30,11 @@ void update_viewport(GLFWwindow *window, int width, int height)
     {
         if (width <= height)
         {
-            glOrtho(-20.f, 20.f, -20.f / aspect_ratio, 20.f / aspect_ratio, 20.f, -20.f);
+            glOrtho(-10.f, 10.f, -10.f / aspect_ratio, 10.f / aspect_ratio, 10.f, -10.f);
         }
         else
         {
-            glOrtho(-20.f * aspect_ratio, 20.f * aspect_ratio, -20.f, 20.f, 20.f, -20.f);
+            glOrtho(-10.f * aspect_ratio, 10.f * aspect_ratio, -10.f, 10.f, 10.f, -10.f);
         }
     }
     else
@@ -56,24 +46,22 @@ void update_viewport(GLFWwindow *window, int width, int height)
 
         gluPerspective(fov, aspect_ratio, near_plane, far_plane);
     }
-    glTranslatef(-cameraX, -cameraY, -cameraZ);
+    // glTranslatef(-cameraX, -cameraY, -cameraZ);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
-
 void startup()
 {
-    glfwWindowHint(GLFW_DEPTH_BITS, 32);
+    glClearColor(0.2, 0.2, 0.2, 1.0);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    glClearColor(0.2, 0.2, 0.2, 1.0);
-    for (int i = 0; i <= N; ++i)
+    for (int i = 0; i < N; ++i)
     {
-        float u = static_cast<float>(i) * (360.f/N) / static_cast<float>(360.f);
-        for (int j = 0; j <= N; ++j)
+        float u = static_cast<float>(i) / static_cast<float>(N - 1);
+        for (int j = 0; j < N; ++j)
         {
-            float v = static_cast<float>(j) * (360.f/N) / static_cast<float>(360.f);
+            float v = static_cast<float>(j) / static_cast<float>(N - 1);
             vertices[i][j][0] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (cos(2 * M_PI * v));
             vertices[i][j][1] = (160 * pow(u, 4)) - (320 * pow(u, 3)) + (160 * pow(u, 2));
             vertices[i][j][2] = ((-90 * pow(u, 5)) + (225 * pow(u, 4)) - (270 * pow(u, 3)) + (180 * pow(u, 2)) - (45 * u)) * (sin(2 * M_PI * v));
@@ -92,39 +80,21 @@ void render(double time)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     glRotatef(static_cast<float>(time) * 40.f, 1, 1, 1);
+    glBegin(GL_LINES);
     for (int i = 0; i < N; ++i)
     {
         for (int j = 0; j < N; ++j)
         {
-            glBegin(GL_TRIANGLES);
-            glColor3f(color_rand[i][j][0].values[0], color_rand[i][j][0].values[1], color_rand[i][j][0].values[2]);
             glVertex3fv(vertices[i][j]);
-
-            //glColor3f(color_rand[i][j][1].values[0], color_rand[i][j][1].values[1], color_rand[i][j][1].values[2]);
             glVertex3fv(vertices[i][j + 1]);
-
-            //glColor3f(color_rand[i][j][2].values[0], color_rand[i][j][2].values[1], color_rand[i][j][2].values[2]);
             glVertex3fv(vertices[i + 1][j]);
-            glEnd();
-            glBegin(GL_TRIANGLES);
-            //glColor3f(color_rand[i][j][3].values[0], color_rand[i][j][3].values[1], color_rand[i][j][3].values[2]);
             glVertex3fv(vertices[i + 1][j]);
-
-            //glColor3f(color_rand[i][j][4].values[0], color_rand[i][j][4].values[1], color_rand[i][j][4].values[2]);
             glVertex3fv(vertices[i + 1][j + 1]);
-
-            //glColor3f(color_rand[i][j][5].values[0], color_rand[i][j][5].values[1], color_rand[i][j][5].values[2]);
-            glVertex3fv(vertices[i][j+1]);
-            glEnd();
+            glVertex3fv(vertices[i][j + 1]);
         }
     }
     glEnd();
     glFlush();
-}
-// Zmienna losowa normalizowana
-float random_normalized()
-{
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
 void render()
@@ -137,17 +107,6 @@ int main()
 {
     if (!glfwInit())
         return -1;
-    srand(static_cast<unsigned>(time(0)));
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            for (int k = 0; k < 6; k++)
-            {
-                color_rand[i][j][k] = {random_normalized(), random_normalized(), random_normalized()};
-            }
-        }
-    }
     GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, " _floating_ Lab 3", NULL, NULL);
     if (!window)
     {
