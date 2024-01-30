@@ -9,11 +9,13 @@ static int HEIGHT = 800;
 
 bool frustrum = true;
 
-ILuint imageID;
+ILuint imageID[2];
 GLuint textureID[2];
 int pic_mode = 0;
 
-GLfloat camera[3] = {0.0f, 0.0f, 4.f};
+GLfloat camera[3] = {0.0f, 5.0f, 1.f};
+GLfloat camera_center[3] = {0.0f, 0.0f, 0.f};
+
 float delta_x = 0.f;
 float delta_y = 0.f;
 float mouse_x_pos_old = 0.f;
@@ -94,8 +96,8 @@ void startup(){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 	glClearColor(0.1, 0.1, 0.1, 1.0);
-    ilGenImages(1, &imageID);
-    ilBindImage(imageID);
+    ilGenImages(1, &imageID[0]);
+    ilBindImage(imageID[0]);
     if (ilLoad(IL_TGA, "bgb.tga")) {
         ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
         printf("Wczytano teksture!\n");
@@ -111,22 +113,26 @@ void startup(){
     glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
              ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,
              ilGetData());
-    ilDeleteImages(1, &imageID);
+    ilDeleteImages(1, &imageID[0]);
 
-    ilGenImages(2, &imageID);
-    ilBindImage(imageID);
+    ilGenImages(1, &imageID[1]);
+    ilBindImage(imageID[1]);
     if (ilLoad(IL_TGA, "tekstura.tga")) {
         ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
         printf("Wczytano teksture!\n");
     } else {
         printf("Nie udalo sie zaladowac tekstury!\n");
     }
-    glGenTextures(2, &textureID[1]);
+    glGenTextures(1, &textureID[1]);
     glBindTexture(GL_TEXTURE_2D, textureID[1]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
              ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,
              ilGetData());
-    ilDeleteImages(2, &imageID);
+    ilDeleteImages(1, &imageID[1]);
 }
 
 void shutdown(GLFWwindow* window){
@@ -160,60 +166,64 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void render(double time){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(camera[0], camera[1], camera[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(camera[0], camera[1], camera[2], camera_center[0], camera_center[1], camera_center[2], 0.0, 1.0, 0.0);
+    
     if(left_mouse_button_pressed){
         theta += delta_x * pix2angle;
     }
     glRotatef(theta, 0.0, 1.0, 0.0);
-    glRotatef(30,1,1,0);
+    //glRotatef(30,1,1,0);
     glBindTexture(GL_TEXTURE_2D, textureID[pic_mode]);
 
-    glBegin(GL_QUADS);
+    glBegin(GL_TRIANGLES);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
+    glVertex3f(-1.f, 0.f, -1.f);
+
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1.f, 0.f, 0.f);
+    glVertex3f(1.f, 0.f, -1.f);
+
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
+    glVertex3f(1.f, 0.f, 1.f);
     glEnd();
 
     glBegin(GL_TRIANGLES);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.f, 0.f, -1.f);
+
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
+    glVertex3f(1.f, 0.f, 1.f);
+
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 0.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
+    glVertex3f(-1.f, 0.f, 1.f);
+
     glEnd();
 
-    glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
-    glEnd();
+glBegin(GL_TRIANGLES);
+glTexCoord2f(0.5f, 0.5f); glVertex3f(-1.f, 0.f, -1.f);
+glTexCoord2f(1.0f, 0.5f); glVertex3f(1.f, 0.f, -1.f);
+glTexCoord2f(0.75f, 0.0f); glVertex3f(0, 1.5f, 0.f);
+glEnd();
 
-    glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
-    glEnd();
+// Second Triangle - Bottom-Right Quarter
+glBegin(GL_TRIANGLES);
+glTexCoord2f(0.5f, 1.0f); glVertex3f(1.f, 0.f, -1.f);
+glTexCoord2f(0.5f, 0.5f); glVertex3f(1.f, 0.f, 1.f);
+glTexCoord2f(1.0f, 0.75f); glVertex3f(0, 1.5f, 0.f);
+glEnd();
 
-    glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
-    glEnd();
+// Third Triangle - Bottom-Left Quarter
+glBegin(GL_TRIANGLES);
+glTexCoord2f(0.5f, 1.0f); glVertex3f(-1.f, 0.f, 1.f);
+glTexCoord2f(0.0f, 0.5f); glVertex3f(1.f, 0.f, 1.f);
+glTexCoord2f(0.0f, 0.75f); glVertex3f(0, 1.5f, 0.f);
+glEnd();
+
+// Fourth Triangle - Top-Left Quarter
+glBegin(GL_TRIANGLES);
+glTexCoord2f(0.0f, 0.5f); glVertex3f(-1.f, 0.f, -1.f);
+glTexCoord2f(0.5f, 0.5f); glVertex3f(-1.f, 0.f, 1.f);
+glTexCoord2f(0.25f, 0.0f); glVertex3f(0, 1.5f, 0);
+glEnd();
 
     glFlush();
 }

@@ -12,7 +12,7 @@ bool frustrum = true;
 ILuint imageID;
 GLuint textureID;
 
-GLfloat camera[3] = {0.0f, 0.0f, 4.f};
+GLfloat camera[3] = {0.0f, 0.0f, 6.f};
 float delta_x = 0.f;
 float delta_y = 0.f;
 float mouse_x_pos_old = 0.f;
@@ -140,7 +140,8 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void render(double time){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(camera[0], camera[1], camera[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(camera[0], camera[1], camera[2], 
+    0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     if(left_mouse_button_pressed){
         theta += delta_x * pix2angle;
     }
@@ -150,49 +151,51 @@ void render(double time){
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1.f, 0.f, 0.f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2.5, -2.5, 0.0);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2.5, -2.5, 0.0);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2.5, 2.5, 0.0);
     glEnd();
 
     glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 0.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2.5, -2.5, 0.0);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2.5, 2.5, 0.0);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2.5, 2.5, 0.0);
     glEnd();
 
     glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
-    glEnd();
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2.5, -2.5, 0.0);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2.5, -2.5, 0.0);
+    glTexCoord2f(0.5, 1.0);
+    glVertex3f(0.0, 0.0, 5.0);
 
-    glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
-    glEnd();
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(2.5, -2.5, 0.0);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2.5, 2.5, 0.0);
+    glTexCoord2f(0.5, 1.0);
+    glVertex3f(0.0, 0.0, 5.0);
 
-    glBegin(GL_TRIANGLES);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.f, 0.f, 2.f);
-    glTexCoord2f(0.5f, 0.0f);
-    glVertex3f(0,1.5f, 1);
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(2.5, 2.5, 0.0);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(-2.5, 2.5, 0.0);
+    glTexCoord2f(0.5, 1.0);
+    glVertex3f(0.0, 0.0, 5.0);
+
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2.5, 2.5, 0.0);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(-2.5, -2.5, 0.0);
+    glTexCoord2f(0.5, 1.0);
+    glVertex3f(0.0, 0.0, 5.0);
     glEnd();
 
     glFlush();

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -8,7 +9,7 @@ static int HEIGHT = 800;
 
 float cameraX = 0.0f;
 float cameraY = 0.0f;
-float cameraZ = -5.0f;
+float cameraZ = -4.0f;
 bool frustrum = true;
 
 float delta_x = 0.f;
@@ -19,8 +20,15 @@ float theta = 0.f;
 float phi = 0.f;
 float pix2angle = 1.f;
 bool left_mouse_button_pressed = false;
+bool right_mouse_button_pressed = false;
 float scale_factor = 1.0f;
 
+
+double radians(double degree)
+{
+    double pi = 3.14159265359;
+    return (degree * (pi / 180));
+}
 
 void update_viewport(GLFWwindow *window, int width, int height)
 {
@@ -86,6 +94,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         left_mouse_button_pressed = 1;
     else
         left_mouse_button_pressed = 0;
+    if(button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+        right_mouse_button_pressed = 1;
+    else
+        right_mouse_button_pressed = 0;
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
@@ -154,12 +166,20 @@ void render(double time){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
+    float xeye = cameraZ * sin(radians(theta)) * cos(radians(phi));
+    float yeye = cameraZ * sin(radians(phi));
+    float zeye = cameraZ * cos(radians(theta)) * cos(radians(phi));
+
+    gluLookAt(xeye, yeye, zeye, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     if (left_mouse_button_pressed){
         theta += delta_x * pix2angle;
         phi += delta_y * pix2angle;
     }
-    glRotatef(theta, 0.0, 1.0, 0.0);
-    glRotatef(phi, 0.0, 0.0, 1.0);
+    if(right_mouse_button_pressed){
+        cameraZ += delta_y * 0.1;
+    }
+    //glRotatef(theta, 0.0, 1.0, 0.0);
+    //glRotatef(phi, 0.0, 0.0, 1.0);
     glScalef(scale_factor, scale_factor, scale_factor);
     axes();
     example_object();
